@@ -79,14 +79,8 @@
     <aside class="control-sidebar control-sidebar-dark">
         <!-- Control sidebar content goes here -->
     </aside>
-    <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
-
-<!-- jQuery -->
-
-<script src="./js/jquery.js"></script>
-<script src="./js/jquery.js"></script>
+<script src="/js/jquery.js"></script>
 <script src="/AdminLTE/dist/js/adminlte.js"></script>
 <script src="{{mix("js/app.js")}}"></script>
 @stack('scripts')

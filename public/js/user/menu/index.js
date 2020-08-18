@@ -3299,7 +3299,7 @@ __webpack_require__.r(__webpack_exports__);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [{
   name: "Index",
-  path: '/menu',
+  path: '/user/menu',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 0).then(__webpack_require__.bind(null, /*! ./Index.vue */ "./resources/js/user/menu/Index.vue"));
   }

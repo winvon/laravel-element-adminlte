@@ -85,6 +85,9 @@ __webpack_require__.r(__webpack_exports__);
     add: function add() {
       this.visibleDialog = true;
     }
+  },
+  created: function created() {
+    console.log('aaa');
   }
 });
 
@@ -121,8 +124,50 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CreateOrEdit",
+  data: function data() {
+    return {
+      model: {
+        uri: '',
+        name: '',
+        pid: 0,
+        icon: '',
+        guard_name: '',
+        sort: 0,
+        is_ajax: 0
+      },
+      routeList: [],
+      formLabelWidth: "120px",
+      dialogFormVisible: this.visible,
+      form: {
+        name: '',
+        region: '',
+        date1: '',
+        date2: '',
+        delivery: false,
+        type: [],
+        resource: '',
+        desc: ''
+      }
+    };
+  },
   props: {
     visible: {
       type: Boolean,
@@ -155,21 +200,17 @@ __webpack_require__.r(__webpack_exports__);
       return "编辑权限";
     }
   },
-  data: function data() {
-    return {
-      formLabelWidth: "120px",
-      dialogFormVisible: this.visible,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
-      }
-    };
+  mounted: function mounted() {
+    this.getRouteList();
+  },
+  methods: {
+    getRouteList: function getRouteList() {
+      var _this = this;
+
+      axios.get(routeList.routeList).then(function (response) {
+        _this.routeList = response.data;
+      });
+    }
   }
 });
 
@@ -279,7 +320,40 @@ var render = function() {
                 "el-form-item",
                 {
                   attrs: {
-                    label: "活动名称",
+                    label: "菜单路由:",
+                    "label-width": _vm.formLabelWidth
+                  }
+                },
+                [
+                  _c(
+                    "el-select",
+                    {
+                      attrs: { placeholder: "请选择" },
+                      model: {
+                        value: _vm.form.uri,
+                        callback: function($$v) {
+                          _vm.$set(_vm.form, "uri", $$v)
+                        },
+                        expression: "form.uri"
+                      }
+                    },
+                    _vm._l(_vm.routeList, function(item) {
+                      return _c("el-option", {
+                        key: item.value,
+                        attrs: { label: item.label, value: item.value }
+                      })
+                    }),
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                {
+                  attrs: {
+                    label: "菜单名称:",
                     "label-width": _vm.formLabelWidth
                   }
                 },
@@ -302,36 +376,87 @@ var render = function() {
                 "el-form-item",
                 {
                   attrs: {
-                    label: "活动区域",
+                    label: "父级菜单:",
                     "label-width": _vm.formLabelWidth
                   }
                 },
                 [
-                  _c(
-                    "el-select",
-                    {
-                      attrs: { placeholder: "请选择活动区域" },
-                      model: {
-                        value: _vm.form.region,
-                        callback: function($$v) {
-                          _vm.$set(_vm.form, "region", $$v)
-                        },
-                        expression: "form.region"
-                      }
-                    },
-                    [
-                      _c("el-option", {
-                        attrs: { label: "区域一", value: "shanghai" }
-                      }),
-                      _vm._v(" "),
-                      _c("el-option", {
-                        attrs: { label: "区域二", value: "beijing" }
-                      })
-                    ],
-                    1
-                  )
+                  _c("el-input", {
+                    attrs: { autocomplete: "off" },
+                    model: {
+                      value: _vm.form.pid,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "pid", $$v)
+                      },
+                      expression: "form.pid"
+                    }
+                  })
                 ],
                 1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                {
+                  attrs: {
+                    label: "菜单图标:",
+                    "label-width": _vm.formLabelWidth
+                  }
+                },
+                [
+                  _c("el-input", {
+                    attrs: { autocomplete: "off" },
+                    model: {
+                      value: _vm.form.icon,
+                      callback: function($$v) {
+                        _vm.$set(_vm.form, "icon", $$v)
+                      },
+                      expression: "form.icon"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "el-form-item",
+                {
+                  attrs: { label: "类型:", "label-width": _vm.formLabelWidth }
+                },
+                [
+                  [
+                    _c(
+                      "el-radio",
+                      {
+                        attrs: { label: 0 },
+                        model: {
+                          value: _vm.form.is_ajax,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "is_ajax", $$v)
+                          },
+                          expression: "form.is_ajax"
+                        }
+                      },
+                      [_vm._v("菜单")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "el-radio",
+                      {
+                        attrs: { label: 1 },
+                        model: {
+                          value: _vm.form.is_ajax,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "is_ajax", $$v)
+                          },
+                          expression: "form.is_ajax"
+                        }
+                      },
+                      [_vm._v("权限")]
+                    )
+                  ]
+                ],
+                2
               )
             ],
             1

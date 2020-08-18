@@ -5,7 +5,7 @@ Vue.use(VueRouter)
 const routes = [
     {
         name:"Index",
-        path: '/menu',
+        path: '/user/menu',
         component: ()=>import("./Index.vue")
     },
 ]

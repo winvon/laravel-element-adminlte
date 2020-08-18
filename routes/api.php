@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::namespace('Api')->name('api.')->group(function () {
+    Route::get('route/index', 'RouteController@index')->name('route.index');
+});
+
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

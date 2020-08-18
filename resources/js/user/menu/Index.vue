@@ -73,6 +73,9 @@
             add() {
                 this.visibleDialog = true
             }
+        },
+        created() {
+            console.log('aaa')
         }
     }
 </script>

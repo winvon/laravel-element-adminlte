@@ -9,11 +9,24 @@ use Illuminate\Http\Request;
 
 class MenuController extends Controller
 {
+
+    public function getModel()
+    {
+        return new Menu();
+    }
+
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->ajax()) {
+          $rows=  $this->getModel()->with([])
+              ->where('guard_name', 'user')
+              ->get();
+          return $rows;
+        }
+
         return view("user.menu.index");
     }
 
@@ -35,7 +48,18 @@ class MenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validate($request,
+            [
+                'uri' => ['nullable', 'string'],
+                'name' => ['nullable', 'string'],
+                'pid' => ['required', 'int'],
+                'icon' => ['max:200'],
+                'is_ajax' => ['nullable', 'boolean']
+            ]);
+        $data['guard_name'] = 'user';
+        $data['status'] = 1;
+        $model = (new Menu())->addMenu(array_filter($data));
+        return $model;
     }
 
     /**

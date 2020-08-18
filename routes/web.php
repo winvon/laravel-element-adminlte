@@ -24,6 +24,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::namespace('User')->name('user.')->group(function () {
     Route::get('user/login', 'LoginController@index')->name('login');
     Route::post('user/login', 'LoginController@login')->name('login.login');
-    Route::resource('menu', "MenuController");
+    Route::get('user/menu', 'MenuController@index')->name('menu.index');
+    Route::post('user/menu', 'MenuController@store')->name('menu.store');
 });
 
