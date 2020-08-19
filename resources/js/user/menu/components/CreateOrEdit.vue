@@ -3,7 +3,7 @@
         <el-dialog :title="title" :visible.sync="dialogFormVisible">
             <el-form :model="form">
                 <el-form-item label="菜单路由:" :label-width="formLabelWidth">
-                    <el-select v-model="form.uri" placeholder="请选择">
+                    <el-select v-model="form.uri" filterable placeholder="请选择">
                         <el-option
                             v-for="item in routeList"
                             :key="item.value"
@@ -16,7 +16,22 @@
                     <el-input v-model="form.name" autocomplete="off"></el-input>
                 </el-form-item>
                 <el-form-item label="父级菜单:" :label-width="formLabelWidth">
-                    <el-input v-model="form.pid" autocomplete="off"></el-input>
+                    <el-popover
+                        v-model="popoverVisible"
+                        placement="bottom"
+                        width="800"
+                        trigger="click">
+                        <el-tree
+                            :data="treeData"
+                            @node-click="nodeClick"
+                            :expand-on-click-node="false"
+                            node-key="id"
+                            default-expand-all
+                            :props="defaultProps">
+                        </el-tree>
+                        <el-input v-model="form.pname" slot="reference" autocomplete="off"></el-input>
+                        <el-input v-model="form.pid" type="hidden" autocomplete="off"></el-input>
+                    </el-popover>
                 </el-form-item>
                 <el-form-item label="菜单图标:" :label-width="formLabelWidth">
                     <el-input v-model="form.icon" autocomplete="off"></el-input>
@@ -30,7 +45,7 @@
             </el-form>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogFormVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+                <el-button type="primary" @click="submit">提 交</el-button>
             </div>
         </el-dialog>
     </div>
@@ -41,28 +56,25 @@
         name: "CreateOrEdit",
         data() {
             return {
-                model: {
+                popoverVisible: false,
+                form: {
                     uri: '',
                     name: '',
+                    pname: '',
                     pid: 0,
                     icon: '',
                     guard_name: '',
                     sort: 0,
                     is_ajax: 0,
                 },
-                routeList:[],
+                routeList: [],
+                menuList: [],
                 formLabelWidth: "120px",
                 dialogFormVisible: this.visible,
-                form: {
-                    name: '',
-                    region: '',
-                    date1: '',
-                    date2: '',
-                    delivery: false,
-                    type: [],
-                    resource: '',
-                    desc: ''
-                },
+                defaultProps: {
+                    children: 'children',
+                    label: 'name'
+                }
             }
         },
         props: {
@@ -74,8 +86,13 @@
                 type: Object,
                 default: () => {
                     return {}
-                },
-                required: false
+                }
+            },
+            tree:{
+                type: Array,
+                default: () => {
+                    return []
+                }
             }
         },
         watch: {
@@ -93,18 +110,33 @@
                 if (Object.keys(this.item).length === 0) {
                     return "新增权限"
                 }
+                this.form = _.cloneDeep(this.item)
                 return "编辑权限"
+            },
+            treeData(){
+                return [{id:0,name:'根目录',children:this.tree}]
             }
         },
+
         mounted() {
             this.getRouteList()
         },
         methods: {
+            nodeClick(data, node, object) {
+                this.form.pid = data.id
+                this.form.pname = data.name
+                this.popoverVisible = false
+            },
             getRouteList() {
-                axios.get(routeList.routeList).then(response=>{
-                    this.routeList=response.data
+                axios.get(routeList.routeList).then(response => {
+                    this.routeList = response.data
                 })
 
+            },
+            submit() {
+                axios.post(routeList.menuStore, this.form).then(response => {
+                    this.menuList = response.data
+                })
             }
         }
     }

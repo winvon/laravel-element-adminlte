@@ -31,6 +31,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
@@ -40,54 +69,45 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       visibleDialog: false,
-      data: [{
-        id: 1,
-        label: '一级 1',
-        children: [{
-          id: 4,
-          label: '二级 1-1',
-          children: [{
-            id: 9,
-            label: '三级 1-1-1'
-          }, {
-            id: 10,
-            label: '三级 1-1-2'
-          }]
-        }]
-      }, {
-        id: 2,
-        label: '一级 2',
-        children: [{
-          id: 5,
-          label: '二级 2-1'
-        }, {
-          id: 6,
-          label: '二级 2-2'
-        }]
-      }, {
-        id: 3,
-        label: '一级 3',
-        children: [{
-          id: 7,
-          label: '二级 3-1'
-        }, {
-          id: 8,
-          label: '二级 3-2'
-        }]
-      }],
+      menuList: [],
+      item: {},
+      tree: [],
       defaultProps: {
         children: 'children',
-        label: 'label'
+        label: 'name'
       }
     };
   },
+  computed: {},
+  created: function created() {
+    this.getMenuList();
+  },
   methods: {
+    append: function append(data) {
+      console.log('append', data);
+    },
+    edit: function edit(data) {
+      this.item = data;
+      this.visibleDialog = true;
+    },
+    remove: function remove(node, data) {
+      console.log('remove', data);
+    },
     add: function add() {
       this.visibleDialog = true;
+    },
+    getMenuList: function getMenuList() {
+      var _this = this;
+
+      axios.get(routeList.menuList).then(function (response) {
+        _this.bindData(response.data);
+      });
+    },
+    bindData: function bindData(data) {
+      this.menuList = data;
+      this.tree = data;
+      console.log(this.tree);
     }
-  },
-  created: function created() {
-    console.log('aaa');
   }
 });
 
@@ -140,13 +160,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CreateOrEdit",
   data: function data() {
     return {
-      model: {
+      popoverVisible: false,
+      form: {
         uri: '',
         name: '',
+        pname: '',
         pid: 0,
         icon: '',
         guard_name: '',
@@ -154,17 +191,12 @@ __webpack_require__.r(__webpack_exports__);
         is_ajax: 0
       },
       routeList: [],
+      menuList: [],
       formLabelWidth: "120px",
       dialogFormVisible: this.visible,
-      form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+      defaultProps: {
+        children: 'children',
+        label: 'name'
       }
     };
   },
@@ -177,8 +209,13 @@ __webpack_require__.r(__webpack_exports__);
       type: Object,
       "default": function _default() {
         return {};
-      },
-      required: false
+      }
+    },
+    tree: {
+      type: Array,
+      "default": function _default() {
+        return [];
+      }
     }
   },
   watch: {
@@ -197,18 +234,38 @@ __webpack_require__.r(__webpack_exports__);
         return "新增权限";
       }
 
+      this.form = _.cloneDeep(this.item);
       return "编辑权限";
+    },
+    treeData: function treeData() {
+      return [{
+        id: 0,
+        name: '根目录',
+        children: this.tree
+      }];
     }
   },
   mounted: function mounted() {
     this.getRouteList();
   },
   methods: {
+    nodeClick: function nodeClick(data, node, object) {
+      this.form.pid = data.id;
+      this.form.pname = data.name;
+      this.popoverVisible = false;
+    },
     getRouteList: function getRouteList() {
       var _this = this;
 
       axios.get(routeList.routeList).then(function (response) {
         _this.routeList = response.data;
+      });
+    },
+    submit: function submit() {
+      var _this2 = this;
+
+      axios.post(routeList.menuStore, this.form).then(function (response) {
+        _this2.menuList = response.data;
       });
     }
   }
@@ -244,7 +301,11 @@ var render = function() {
         _vm._v(" "),
         [
           _c("create-or-edit", {
-            attrs: { visible: _vm.visibleDialog },
+            attrs: {
+              visible: _vm.visibleDialog,
+              item: _vm.item,
+              tree: _vm.tree
+            },
             on: {
               "update:visible": function($event) {
                 _vm.visibleDialog = $event
@@ -258,17 +319,98 @@ var render = function() {
     _vm._v(" "),
     _c(
       "div",
-      { staticClass: "col-12 " },
+      { staticClass: "col-12 mt-3" },
       [
         _c("el-tree", {
           attrs: {
-            data: _vm.data,
-            "show-checkbox": "",
+            data: _vm.tree,
             "node-key": "id",
-            "default-expanded-keys": [2, 3],
-            "default-checked-keys": [5],
+            "default-expand-all": "",
             props: _vm.defaultProps
-          }
+          },
+          scopedSlots: _vm._u([
+            {
+              key: "default",
+              fn: function(ref) {
+                var node = ref.node
+                var data = ref.data
+                return _c("span", { staticClass: "custom-tree-node" }, [
+                  _c("span", [_vm._v(_vm._s(node.label))]),
+                  _vm._v(" "),
+                  _c(
+                    "span",
+                    [
+                      _c(
+                        "el-button",
+                        {
+                          attrs: { type: "text", size: "mini" },
+                          on: {
+                            click: function() {
+                              return _vm.append(data)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    添加\n                      "
+                          ),
+                          _c("i", { staticClass: "el-icon-circle-plus" })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-button",
+                        {
+                          attrs: { type: "text", size: "mini" },
+                          on: {
+                            click: function() {
+                              return _vm.edit(data)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v(
+                            "\n                    编辑\n                     "
+                          ),
+                          _c("i", { staticClass: "el-icon-edit" }),
+                          _vm._v(" "),
+                          _c("i", { staticClass: "eel-icon-info" })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-button",
+                        {
+                          attrs: { type: "text", size: "mini" },
+                          on: {
+                            click: function() {
+                              return _vm.remove(node, data)
+                            }
+                          }
+                        },
+                        [
+                          _vm._v("\n                    删除"),
+                          _c("i", { staticClass: "el-icon-remove" })
+                        ]
+                      ),
+                      _vm._v(" "),
+                      _c(
+                        "el-button",
+                        { attrs: { type: "text", size: "mini" } },
+                        [
+                          _c("i", {
+                            staticClass: "el-icon-info",
+                            staticStyle: { color: "#409EFF" }
+                          })
+                        ]
+                      )
+                    ],
+                    1
+                  )
+                ])
+              }
+            }
+          ])
         })
       ],
       1
@@ -328,7 +470,7 @@ var render = function() {
                   _c(
                     "el-select",
                     {
-                      attrs: { placeholder: "请选择" },
+                      attrs: { filterable: "", placeholder: "请选择" },
                       model: {
                         value: _vm.form.uri,
                         callback: function($$v) {
@@ -381,16 +523,59 @@ var render = function() {
                   }
                 },
                 [
-                  _c("el-input", {
-                    attrs: { autocomplete: "off" },
-                    model: {
-                      value: _vm.form.pid,
-                      callback: function($$v) {
-                        _vm.$set(_vm.form, "pid", $$v)
+                  _c(
+                    "el-popover",
+                    {
+                      attrs: {
+                        placement: "bottom",
+                        width: "800",
+                        trigger: "click"
                       },
-                      expression: "form.pid"
-                    }
-                  })
+                      model: {
+                        value: _vm.popoverVisible,
+                        callback: function($$v) {
+                          _vm.popoverVisible = $$v
+                        },
+                        expression: "popoverVisible"
+                      }
+                    },
+                    [
+                      _c("el-tree", {
+                        attrs: {
+                          data: _vm.treeData,
+                          "expand-on-click-node": false,
+                          "node-key": "id",
+                          "default-expand-all": "",
+                          props: _vm.defaultProps
+                        },
+                        on: { "node-click": _vm.nodeClick }
+                      }),
+                      _vm._v(" "),
+                      _c("el-input", {
+                        attrs: { slot: "reference", autocomplete: "off" },
+                        slot: "reference",
+                        model: {
+                          value: _vm.form.pname,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "pname", $$v)
+                          },
+                          expression: "form.pname"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("el-input", {
+                        attrs: { type: "hidden", autocomplete: "off" },
+                        model: {
+                          value: _vm.form.pid,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "pid", $$v)
+                          },
+                          expression: "form.pid"
+                        }
+                      })
+                    ],
+                    1
+                  )
                 ],
                 1
               ),
@@ -484,15 +669,8 @@ var render = function() {
               _vm._v(" "),
               _c(
                 "el-button",
-                {
-                  attrs: { type: "primary" },
-                  on: {
-                    click: function($event) {
-                      _vm.dialogFormVisible = false
-                    }
-                  }
-                },
-                [_vm._v("确 定")]
+                { attrs: { type: "primary" }, on: { click: _vm.submit } },
+                [_vm._v("提 交")]
               )
             ],
             1

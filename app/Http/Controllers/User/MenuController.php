@@ -50,8 +50,8 @@ class MenuController extends Controller
     {
         $data = $this->validate($request,
             [
-                'uri' => ['nullable', 'string'],
-                'name' => ['nullable', 'string'],
+                'uri' => ['required', 'string'],
+                'name' => ['required', 'string'],
                 'pid' => ['required', 'int'],
                 'icon' => ['max:200'],
                 'is_ajax' => ['nullable', 'boolean']

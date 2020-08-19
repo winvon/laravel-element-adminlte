@@ -8,7 +8,8 @@
     <script>
         var routeList = {
             menuList:"{{route('user.menu.index')}}",
-            routeList:"{{route('api.route.index')}}"
+            routeList:"{{route('api.route.index')}}",
+            menuStore:"{{route('user.menu.store')}}",
         }
     </script>
 

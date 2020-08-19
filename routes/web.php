@@ -21,7 +21,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+
 Route::namespace('User')->name('user.')->group(function () {
+    Route::get('user/temp', 'TempController@index')->name('user.temp.index');
     Route::get('user/login', 'LoginController@index')->name('login');
     Route::post('user/login', 'LoginController@login')->name('login.login');
     Route::get('user/menu', 'MenuController@index')->name('menu.index');
