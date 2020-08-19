@@ -1,13 +1,20 @@
 import Vue from "vue"
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
+import ajax from './ajax'
+import * as validator from './validator'
+import * as helper from './helper'
 
 window.Vue = Vue
+window._ = require('lodash');
+window.ajax =ajax;
+window.helper = helper
+window.validator = validator;
 
 Vue.use(ElementUI);
 
-window._ = require('lodash');
 
+require('./filters');
 
 
 /**
