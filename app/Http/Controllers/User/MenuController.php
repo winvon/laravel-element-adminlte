@@ -16,15 +16,18 @@ class MenuController extends Controller
     }
 
     /**
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Request $request
+     * @return array|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function index(Request $request)
     {
         if ($request->ajax()) {
-          $rows=  $this->getModel()->with([])
-              ->where('guard_name', 'user')
-              ->get();
-          return $rows;
+            $rows = $this->getModel()->with([])
+                ->where('guard_name', 'user')
+                ->get()->toArray();
+            $list = list_to_tree($rows, 'id', 'pid', 'children');
+
+            return $list;
         }
 
         return view("user.menu.index");
@@ -93,7 +96,17 @@ class MenuController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $this->validate($request,
+            [
+                'uri' => ['required', 'string'],
+                'name' => ['required', 'string'],
+                'pid' => ['required', 'int'],
+                'icon' => ['max:200'],
+                'is_ajax' => ['nullable', 'boolean']
+            ]);
+        $model=$this->getModel()->query()->findOrFail($id);
+        $model->update($data);
+        return $model;
     }
 
     /**

@@ -47,3 +47,40 @@ if (!function_exists('get_route_information')) {
     }
 }
 
+
+if (!function_exists('list_to_tree')) {
+    /** 将数组转换成 tree结构的数据
+     * @param array $list
+     * @param string $pk
+     * @param string $pid
+     * @param string $child
+     * @param int $root
+     * @return array
+     */
+    function list_to_tree($list, $pk = 'id', $pid = 'pid', $child = '_child', $root = 0)
+    {
+        $tree = array();
+        if (is_array($list)) {
+            //创建基于主键的数组引用
+            $refer = array();
+            foreach ($list as $key => $data) {
+                $refer[$data[$pk]] = &$list[$key];
+            }
+            foreach ($list as $key => $data) {
+                //判断是否存在parent
+                $parantId = $data[$pid];
+                if ($root == $parantId) {
+                    $tree[] = &$list[$key];
+                } else {
+                    if (isset($refer[$parantId])) {
+                        $parent = &$refer[$parantId];
+                        $parent[$child][] = &$list[$key];
+                    }
+                }
+            }
+        }
+        return $tree;
+    }
+}
+
+

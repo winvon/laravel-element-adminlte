@@ -24,7 +24,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item ">
-                    <a href="./home"  class="nav-link active">
+                    <a href="/home"  class="nav-link active">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
                             Dashboard
@@ -47,13 +47,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="AdminLTE/pages/layout/top-nav-sidebar.html" class="nav-link">
+                            <a href="{{route('user.role.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>角色管理</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="AdminLTE/pages/layout/boxed.html" class="nav-link">
+                            <a href="{{route('user.user.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>账户管理</p>
                             </a>

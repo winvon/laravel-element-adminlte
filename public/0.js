@@ -60,6 +60,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
@@ -72,6 +73,7 @@ __webpack_require__.r(__webpack_exports__);
       menuList: [],
       item: {},
       tree: [],
+      node: {},
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -83,16 +85,13 @@ __webpack_require__.r(__webpack_exports__);
     this.getMenuList();
   },
   methods: {
-    append: function append(data) {
-      console.log('append', data);
-    },
-    edit: function edit(data) {
+    append: function append(data) {},
+    edit: function edit(node, data) {
       this.item = data;
+      this.node = node;
       this.visibleDialog = true;
     },
-    remove: function remove(node, data) {
-      console.log('remove', data);
-    },
+    remove: function remove(node, data) {},
     add: function add() {
       this.visibleDialog = true;
     },
@@ -106,7 +105,6 @@ __webpack_require__.r(__webpack_exports__);
     bindData: function bindData(data) {
       this.menuList = data;
       this.tree = data;
-      console.log(this.tree);
     }
   }
 });
@@ -175,10 +173,24 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "CreateOrEdit",
   data: function data() {
     return {
+      edit: false,
       popoverVisible: false,
       form: {
         uri: '',
@@ -211,6 +223,12 @@ __webpack_require__.r(__webpack_exports__);
         return {};
       }
     },
+    node: {
+      type: Object,
+      "default": function _default() {
+        return {};
+      }
+    },
     tree: {
       type: Array,
       "default": function _default() {
@@ -231,10 +249,12 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     title: function title() {
       if (Object.keys(this.item).length === 0) {
+        this.edit = false;
         return "新增权限";
       }
 
       this.form = _.cloneDeep(this.item);
+      this.edit = true;
       return "编辑权限";
     },
     treeData: function treeData() {
@@ -264,8 +284,44 @@ __webpack_require__.r(__webpack_exports__);
     submit: function submit() {
       var _this2 = this;
 
-      axios.post(routeList.menuStore, this.form).then(function (response) {
-        _this2.menuList = response.data;
+      this.$refs['form'].validate(function (valid) {
+        if (valid) {
+          axios.post(routeList.menuStore, _this2.form).then(function (response) {
+            _this2.menuList = response.data;
+            _this2.dialogFormVisible = false;
+            helper.alert('新增成功', {
+              type: "success"
+            });
+
+            _this2.$emit('updateList');
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
+    },
+    submitEdte: function submitEdte() {
+      var _this3 = this;
+
+      this.$refs['form'].validate(function (valid) {
+        if (valid) {
+          var url = helper.bind_str(routeList.menuEdit, {
+            id: _this3.form.id
+          });
+          ajax.put(url, _this3.form).then(function (response) {
+            _this3.menuList = response.data;
+            _this3.dialogFormVisible = false;
+            helper.alert('编辑成功', {
+              type: "success"
+            });
+
+            _this3.$emit('updateList');
+          });
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
       });
     }
   }
@@ -304,9 +360,11 @@ var render = function() {
             attrs: {
               visible: _vm.visibleDialog,
               item: _vm.item,
-              tree: _vm.tree
+              tree: _vm.tree,
+              node: _vm.node
             },
             on: {
+              updateList: _vm.getMenuList,
               "update:visible": function($event) {
                 _vm.visibleDialog = $event
               }
@@ -325,6 +383,7 @@ var render = function() {
           attrs: {
             data: _vm.tree,
             "node-key": "id",
+            "expand-on-click-node": false,
             "default-expand-all": "",
             props: _vm.defaultProps
           },
@@ -364,7 +423,7 @@ var render = function() {
                           attrs: { type: "text", size: "mini" },
                           on: {
                             click: function() {
-                              return _vm.edit(data)
+                              return _vm.edit(node, data)
                             }
                           }
                         },
@@ -456,14 +515,22 @@ var render = function() {
         [
           _c(
             "el-form",
-            { attrs: { model: _vm.form } },
+            { ref: "form", attrs: { model: _vm.form } },
             [
               _c(
                 "el-form-item",
                 {
                   attrs: {
                     label: "菜单路由:",
-                    "label-width": _vm.formLabelWidth
+                    "label-width": _vm.formLabelWidth,
+                    prop: "uri",
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入菜单路由",
+                        trigger: "blur"
+                      }
+                    ]
                   }
                 },
                 [
@@ -496,7 +563,15 @@ var render = function() {
                 {
                   attrs: {
                     label: "菜单名称:",
-                    "label-width": _vm.formLabelWidth
+                    "label-width": _vm.formLabelWidth,
+                    prop: "name",
+                    rules: [
+                      {
+                        required: true,
+                        message: "请输入菜单名称",
+                        trigger: "blur"
+                      }
+                    ]
                   }
                 },
                 [
@@ -519,7 +594,15 @@ var render = function() {
                 {
                   attrs: {
                     label: "父级菜单:",
-                    "label-width": _vm.formLabelWidth
+                    "label-width": _vm.formLabelWidth,
+                    prop: "pname",
+                    rules: [
+                      {
+                        required: false,
+                        message: "请选择父级菜单",
+                        trigger: "blur"
+                      }
+                    ]
                   }
                 },
                 [
@@ -548,7 +631,14 @@ var render = function() {
                           "default-expand-all": "",
                           props: _vm.defaultProps
                         },
-                        on: { "node-click": _vm.nodeClick }
+                        on: { "node-click": _vm.nodeClick },
+                        model: {
+                          value: _vm.form.pid,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "pid", $$v)
+                          },
+                          expression: "form.pid"
+                        }
                       }),
                       _vm._v(" "),
                       _c("el-input", {
@@ -579,7 +669,9 @@ var render = function() {
                 ],
                 1
               ),
-              _vm._v(" "),
+              _vm._v(
+                "\n            " + _vm._s(_vm.form.pid) + "\n            "
+              ),
               _c(
                 "el-form-item",
                 {
@@ -606,7 +698,14 @@ var render = function() {
               _c(
                 "el-form-item",
                 {
-                  attrs: { label: "类型:", "label-width": _vm.formLabelWidth }
+                  attrs: {
+                    label: "类型:",
+                    "label-width": _vm.formLabelWidth,
+                    prop: "is_ajax",
+                    rules: [
+                      { required: true, message: "请选择类型", trigger: "blur" }
+                    ]
+                  }
                 },
                 [
                   [
@@ -667,11 +766,24 @@ var render = function() {
                 [_vm._v("取 消")]
               ),
               _vm._v(" "),
-              _c(
-                "el-button",
-                { attrs: { type: "primary" }, on: { click: _vm.submit } },
-                [_vm._v("提 交")]
-              )
+              !_vm.edit
+                ? _c(
+                    "el-button",
+                    { attrs: { type: "primary" }, on: { click: _vm.submit } },
+                    [_vm._v("提 交")]
+                  )
+                : _vm._e(),
+              _vm._v(" "),
+              _vm.edit
+                ? _c(
+                    "el-button",
+                    {
+                      attrs: { type: "primary" },
+                      on: { click: _vm.submitEdte }
+                    },
+                    [_vm._v("编 辑")]
+                  )
+                : _vm._e()
             ],
             1
           )

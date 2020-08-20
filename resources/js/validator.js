@@ -1,4 +1,3 @@
-import * as helper from '@/helper'
 
 /**
  * 验证字段必须是完全是字母、数字

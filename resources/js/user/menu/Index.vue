@@ -3,13 +3,14 @@
         <div class="col-12">
             <el-button type="primary" @click="add">新增</el-button>
             <template>
-                <create-or-edit :visible.sync="visibleDialog" :item="item" :tree="tree"></create-or-edit>
+                <create-or-edit @updateList="getMenuList" :visible.sync="visibleDialog" :item="item" :tree="tree" :node="node"></create-or-edit>
             </template>
         </div>
         <div class="col-12 mt-3">
             <el-tree
                 :data="tree"
                 node-key="id"
+                :expand-on-click-node="false"
                 default-expand-all
                 :props="defaultProps">
                 <span class="custom-tree-node" slot-scope="{ node, data }">
@@ -25,7 +26,7 @@
                       <el-button
                           type="text"
                           size="mini"
-                          @click="() => edit(data)">
+                          @click="() => edit(node,data)">
                         编辑
                          <i class="el-icon-edit"></i>
                          <i class="eel-icon-info"></i>
@@ -60,6 +61,7 @@
                 menuList: [],
                 item: {},
                 tree: [],
+                node: {},
                 defaultProps: {
                     children: 'children',
                     label: 'name'
@@ -74,21 +76,21 @@
         },
         methods: {
             append(data) {
-                console.log('append', data)
+
             },
 
-            edit(data) {
+            edit(node,data) {
                 this.item = data
+                this.node = node
                 this.visibleDialog = true
             },
 
             remove(node, data) {
-                console.log('remove', data)
+
             },
 
             add() {
                 this.visibleDialog = true
-
             },
             getMenuList() {
                 axios.get(routeList.menuList).then(response => {
@@ -98,7 +100,6 @@
             bindData(data) {
                 this.menuList=data
                 this.tree=data
-                console.log(this.tree)
             }
         }
     }

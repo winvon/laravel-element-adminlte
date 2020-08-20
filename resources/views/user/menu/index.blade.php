@@ -10,6 +10,7 @@
             menuList:"{{route('user.menu.index')}}",
             routeList:"{{route('api.route.index')}}",
             menuStore:"{{route('user.menu.store')}}",
+            menuEdit:"{{route('user.menu.update',['id'=>':id'])}}",
         }
     </script>
 
