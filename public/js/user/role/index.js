@@ -36,7 +36,7 @@
 /******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 	// Promise = chunk loading, 0 = chunk loaded
 /******/ 	var installedChunks = {
-/******/ 		"/js/user/user/index": 0
+/******/ 		"/js/user/role/index": 0
 /******/ 	};
 /******/
 /******/
@@ -196,7 +196,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 2);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3267,27 +3267,27 @@ if (inBrowser && window.Vue) {
 
 /***/ }),
 
-/***/ "./resources/js/user/user/index.js":
+/***/ "./resources/js/user/role/index.js":
 /*!*****************************************!*\
-  !*** ./resources/js/user/user/index.js ***!
+  !*** ./resources/js/user/role/index.js ***!
   \*****************************************/
 /*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _router_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./router.js */ "./resources/js/user/user/router.js");
+/* harmony import */ var _router__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./router */ "./resources/js/user/role/router.js");
 
 new Vue({
-  router: _router_js__WEBPACK_IMPORTED_MODULE_0__["default"],
+  router: _router__WEBPACK_IMPORTED_MODULE_0__["default"],
   el: "#app"
 });
 
 /***/ }),
 
-/***/ "./resources/js/user/user/router.js":
+/***/ "./resources/js/user/role/router.js":
 /*!******************************************!*\
-  !*** ./resources/js/user/user/router.js ***!
+  !*** ./resources/js/user/role/router.js ***!
   \******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -3299,15 +3299,9 @@ __webpack_require__.r(__webpack_exports__);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [{
   name: "Index",
-  path: '/user',
+  path: "/user/role",
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./Index.vue */ "./resources/js/user/user/Index.vue"));
-  }
-}, {
-  name: "Edit",
-  path: '/user/:id',
-  component: function component() {
-    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./Edit.vue */ "./resources/js/user/user/Edit.vue"));
+    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./Index.vue */ "./resources/js/user/role/Index.vue"));
   }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
@@ -3318,14 +3312,26 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 
 /***/ }),
 
-/***/ 2:
-/*!***********************************************!*\
-  !*** multi ./resources/js/user/user/index.js ***!
-  \***********************************************/
+/***/ "./resources/sass/app.scss":
+/*!*********************************!*\
+  !*** ./resources/sass/app.scss ***!
+  \*********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+
+/***/ 0:
+/*!*************************************************************************!*\
+  !*** multi ./resources/js/user/role/index.js ./resources/sass/app.scss ***!
+  \*************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\wwwroot\practise\resources\js\user\user\index.js */"./resources/js/user/user/index.js");
+__webpack_require__(/*! D:\wwwroot\practise\resources\js\user\role\index.js */"./resources/js/user/role/index.js");
+module.exports = __webpack_require__(/*! D:\wwwroot\practise\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

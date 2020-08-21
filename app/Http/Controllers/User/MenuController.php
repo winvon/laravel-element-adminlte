@@ -22,11 +22,10 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $rows = $this->getModel()->with([])
+            $rows = $this->getModel()->with(['parent'])
                 ->where('guard_name', 'user')
                 ->get()->toArray();
             $list = list_to_tree($rows, 'id', 'pid', 'children');
-
             return $list;
         }
 

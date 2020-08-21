@@ -1,4 +1,5 @@
-@extends("layouts.AdminLTE.app")
+@extends('layouts.user.app')
+
 
 
 @section('content')

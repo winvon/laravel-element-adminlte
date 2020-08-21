@@ -18,7 +18,7 @@ class Menu extends Model
         'is_ajax',
     ];
 
-    public $casts=[
+    public $casts = [
         'is_ajax' => 'boolean',
     ];
 
@@ -38,5 +38,13 @@ class Menu extends Model
         $model->pids = data_get($parent, 'pids', 0) . "," . $model->id;
         $model->save();
         return $model;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Menu::class,'id','pid');
     }
 }

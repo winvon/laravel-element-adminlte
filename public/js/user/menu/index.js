@@ -196,7 +196,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 1);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -3312,26 +3312,14 @@ var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
 
 /***/ }),
 
-/***/ "./resources/sass/app.scss":
-/*!*********************************!*\
-  !*** ./resources/sass/app.scss ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-
-/***/ 0:
-/*!*************************************************************************!*\
-  !*** multi ./resources/js/user/menu/index.js ./resources/sass/app.scss ***!
-  \*************************************************************************/
+/***/ 1:
+/*!***********************************************!*\
+  !*** multi ./resources/js/user/menu/index.js ***!
+  \***********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\wwwroot\practise\resources\js\user\menu\index.js */"./resources/js/user/menu/index.js");
-module.exports = __webpack_require__(/*! D:\wwwroot\practise\resources\sass\app.scss */"./resources/sass/app.scss");
+module.exports = __webpack_require__(/*! D:\wwwroot\practise\resources\js\user\menu\index.js */"./resources/js/user/menu/index.js");
 
 
 /***/ })

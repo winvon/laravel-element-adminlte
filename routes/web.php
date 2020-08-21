@@ -23,15 +23,23 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 
 Route::namespace('User')->name('user.')->group(function () {
-    Route::get('user/temp', 'TempController@index')->name('user.temp.index');
-    Route::get('user', 'UserController@index')->name('user.index');
-    Route::get('user/role', 'RoleController@index')->name('role.index');
+
     Route::get('user/login', 'LoginController@index')->name('login');
     Route::post('user/login', 'LoginController@login')->name('login.login');
-    Route::get('user/{id}', 'UserController@show')->name('user.show');
-    Route::put('user/{id}', 'UserController@update')->name('user.update');
+    Route::get('user/temp', 'TempController@index')->name('user.temp.index');
+
+
+    Route::get('user/role', 'RoleController@index')->name('role.index');
+    Route::get('user/role/{id}', 'RoleController@show')->name('role.show');
+    Route::put('user/role/{id}', 'RoleController@update')->name('role.update');
+    Route::post('user/role', 'RoleController@store')->name('role.store');
+
     Route::get('user/menu', 'MenuController@index')->name('menu.index');
     Route::post('user/menu', 'MenuController@store')->name('menu.store');
-    Route::put('user/update/{id}', 'MenuController@update')->name('menu.update');
+    Route::put('user/menu/{id}', 'MenuController@update')->name('menu.update');
+
+    Route::get('user/user', 'UserController@index')->name('user.index');
+    Route::get('user/user/{id}', 'UserController@show')->name('user.show');
+    Route::put('user/user/{id}', 'UserController@update')->name('user.update');
 });
 
