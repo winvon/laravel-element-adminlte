@@ -42,7 +42,6 @@
                         <el-input v-model="form.pid" type="hidden" autocomplete="off"></el-input>
                     </el-popover>
                 </el-form-item>
-                {{form.pid}}
                 <el-form-item label="菜单图标:" :label-width="formLabelWidth">
                     <el-input v-model="form.icon" autocomplete="off"></el-input>
                 </el-form-item>
@@ -50,8 +49,8 @@
       { required: true, message: '请选择类型', trigger: 'blur' }
     ]">
                     <template>
-                        <el-radio v-model="form.is_ajax" :label="0">菜单</el-radio>
-                        <el-radio v-model="form.is_ajax" :label="1">权限</el-radio>
+                        <el-radio v-model="form.is_ajax" :label="false">菜单</el-radio>
+                        <el-radio v-model="form.is_ajax" :label="true">ajax</el-radio>
                     </template>
                 </el-form-item>
             </el-form>
@@ -79,7 +78,7 @@
                     icon: '',
                     guard_name: '',
                     sort: 0,
-                    is_ajax: 0,
+                    is_ajax: false,
                 },
                 routeList: [],
                 menuList: [],
@@ -132,6 +131,9 @@
                     return "新增权限"
                 }
                 this.form = _.cloneDeep(this.item)
+                console.log( this.form )
+                this.form.pname=_.get( this.form,'parent.name')?_.get( this.form,'parent.name'):"根目录"
+                this.form.pid=_.get( this.form,'parent.id')?_.get( this.form,'parent.id'):0
                 this.edit = true
                 return "编辑权限"
             },

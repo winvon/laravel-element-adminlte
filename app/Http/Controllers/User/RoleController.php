@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Menu;
+use App\Permission;
 use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -47,21 +49,55 @@ class RoleController extends Controller
     {
         $data = $this->validate($request, [
             'name' => ['required', Rule::unique('roles')],
-            'guard_name' => ['required']
+            'guard_name' => ['required'],
+            'permissions' => ['nullable', 'array']
         ]);
         $role = Role::create($data);
+
+        $this->syncPermissions($role, $data['permissions']);
+
+
         return $role;
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param $role
+     * @param $permissions
      */
-    public function show($id)
+    public function syncPermissions(Role $role, $permissions)
     {
-        //
+        if (empty($permissions)) {
+            return;
+        }
+        if (!is_array($permissions)) {
+            return;
+        }
+        $permissions = Menu::query()->whereIn('id', $permissions)->get()
+            ->map(function ($menu) {
+                return Permission::updateOrCreate(['menu_id' => data_get($menu, 'id')],
+                    [
+                        'name' => data_get($menu, 'id'),
+                        'guard_name' => data_get($menu, 'guard_name'),
+                        'desc' => data_get($menu, 'name'),
+                    ]
+                );
+            });
+
+        $role->syncPermissions($permissions);
+        return $role;
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\View\View|null
+     */
+    public function show( Request $request,$id)
+    {
+        if ($request->ajax()){
+            return $this->getModel()->with(['permissions'])->findOrFail($id);
+        }
+        return view('user.role.index');
     }
 
     /**
@@ -84,7 +120,14 @@ class RoleController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $this->validate($request, [
+            'name' => ['required', Rule::unique('roles')->ignore($id)],
+            'guard_name' => ['required'],
+            'permissions' => ['nullable', 'array']
+        ]);
+        $role =$this->getModel()->query()->findOrFail($id);
+        $role->update($data);
+        $this->syncPermissions($role, $data['permissions']);
     }
 
     /**

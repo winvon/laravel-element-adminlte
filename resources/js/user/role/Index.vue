@@ -2,11 +2,11 @@
     <div class="row">
         <div class="col-12">
             <v-card>
-                <div slot="header" class="row">
+                <template slot="header" class="clearfix">
                     <div class="col-12 ">
                         <el-button type="primary" @click="handleAdd">新增</el-button>
                     </div>
-                </div>
+                </template>
                 <template>
                     <el-table
                         :data="tableData"
@@ -32,30 +32,6 @@
                 </template>
             </v-card>
         </div>
-        <template>
-            <el-dialog
-                title="提示"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
-                <el-form :model="form" status-icon hide-required-asterisk  ref="form" label-width="100px" class="demo-ruleForm">
-                    <el-form-item label="名称" prop="name"  :rules="[
-      { required: true, message: '请输入名称', trigger: 'blur' },
-    ]">
-                        <el-input type="text" v-model="form.name"  ></el-input>
-                    </el-form-item>
-                    <el-form-item label="类型" prop="guard_name"  :rules="[
-      { required: true, message: '请选择类型', trigger: 'blur' },
-    ]">
-                        <el-input type="text" v-model="form.guard_name"  ></el-input>
-                    </el-form-item>
-                    <el-form-item>
-                        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-                        <el-button @click="dialogVisible=false">取消</el-button>
-                    </el-form-item>
-                </el-form>
-            </el-dialog>
-        </template>
     </div>
 </template>
 
@@ -67,42 +43,24 @@
         components: {VCard},
         data() {
             return {
-                dialogVisible:false,
+                dialogVisible: false,
                 tableData: [],
-                form: {
-                    name: '',
-                    guard_name: '',
-                },
             }
         },
         created() {
             this.fetch()
         },
         methods: {
-            submitForm(){
-                this.$refs.form.validate((valid) => {
-                    if (valid) {
-                        ajax.post(routeList.store,this.form).then(re => {
-                            helper.alert('新增成功',{type:'success'})
-                            this.dialogVisible=false
-                        })
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-
+            handleClose() {
+                this.dialogVisible = false
             },
-            handleClose(){
-                this.dialogVisible=false
+            handleAdd() {
+                this.$router.push({name: "Create"})
             },
-            handleAdd(){
-                this.dialogVisible=true
+            handleEdit(row) {
+                this.$router.push({name: "Edit", params: {id: row.id}})
             },
-            handleEdit(row){
-
-            },
-            handleDel(row){
+            handleDel(row) {
 
             },
             fetch() {

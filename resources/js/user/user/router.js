@@ -4,13 +4,19 @@ Vue.use(VueRouter)
 
 const routes = [
     {
-        name:"Index",
-        path: '/user',
-        component: ()=>import("./Index.vue")
-    },{
-        name:"Edit",
-        path: '/user/:id',
-        component: ()=>import("./Edit.vue")
+        name: "Index",
+        path: '/user/user',
+        component: () => import("./Index.vue")
+    },
+    {
+        name: "Create",
+        path: '/user/user/create',
+        component: () => import("./Edit.vue")
+    },
+    {
+        name: "Edit",
+        path: '/user/user/:id',
+        component: () => import("./Edit.vue")
     },
 ]
 

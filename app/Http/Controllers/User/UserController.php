@@ -47,7 +47,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $this->validate($request, [
+            'name' => ['required', Rule::unique('users'), 'max:200'],
+            'email' => ['required', 'email', Rule::unique('users')],
+            'password' => ['nullable', 'min:6', 'max:20'],
+        ]);
+        if (data_get($data, 'password')) {
+            $data['password'] = Hash::make($data['password']);
+        }
+        $model = User::create($data);
+        return $model;
     }
 
 
@@ -87,7 +96,7 @@ class UserController extends Controller
         $data = $this->validate($request, [
             'name' => ['required', Rule::unique('users')->ignore($id), 'max:200'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
-            'password' => ['nullable', 'min:6', 'max:200'],
+            'password' => ['nullable', 'min:6', 'max:20'],
         ]);
         $model = $this->getModel()->with([])->findOrFail($id);
         if (data_get($data, 'password')) {

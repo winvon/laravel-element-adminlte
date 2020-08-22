@@ -12,6 +12,7 @@
             userList: "{{route('user.user.index')}}",
             userInfo: "{{route('user.user.show',['id'=>':id'])}}",
             userUpdate: "{{route('user.user.update',['id'=>':id'])}}",
+            store: "{{route('user.user.store')}}",
         }
     </script>
     <script src="{{mix('js/user/user/index.js')}}"></script>

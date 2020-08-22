@@ -2,10 +2,11 @@
     <div class="row mt-2">
         <div class="col-12">
             <el-card>
-                <div slot="header">
+                <div slot="header" v-if="$slots.header">
                     <slot name="header">
                     </slot>
                 </div>
+
                 <slot><span>nothing</span></slot>
             </el-card>
         </div>

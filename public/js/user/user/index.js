@@ -3299,15 +3299,21 @@ __webpack_require__.r(__webpack_exports__);
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 var routes = [{
   name: "Index",
-  path: '/user',
+  path: '/user/user',
   component: function component() {
     return __webpack_require__.e(/*! import() */ 3).then(__webpack_require__.bind(null, /*! ./Index.vue */ "./resources/js/user/user/Index.vue"));
   }
 }, {
-  name: "Edit",
-  path: '/user/:id',
+  name: "Create",
+  path: '/user/user/create',
   component: function component() {
-    return __webpack_require__.e(/*! import() */ 2).then(__webpack_require__.bind(null, /*! ./Edit.vue */ "./resources/js/user/user/Edit.vue"));
+    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./Edit.vue */ "./resources/js/user/user/Edit.vue"));
+  }
+}, {
+  name: "Edit",
+  path: '/user/user/:id',
+  component: function component() {
+    return __webpack_require__.e(/*! import() */ 1).then(__webpack_require__.bind(null, /*! ./Edit.vue */ "./resources/js/user/user/Edit.vue"));
   }
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
