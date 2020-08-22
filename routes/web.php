@@ -33,6 +33,7 @@ Route::namespace('User')->prefix('user')->name('user.')->group(function () {
     Route::get('role/create', 'RoleController@index')->name('role.create');
     Route::get('role/{id}', 'RoleController@show')->name('role.show');
     Route::put('role/{id}', 'RoleController@update')->name('role.update');
+    Route::delete('role/{id}', 'RoleController@destroy')->name('role.destroy');
     Route::post('role', 'RoleController@store')->name('role.store');
 
     Route::get('menu', 'MenuController@index')->name('menu.index');

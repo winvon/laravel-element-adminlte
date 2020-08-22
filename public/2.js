@@ -85,6 +85,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
+      loading: false,
       dialogVisible: false,
       tableData: []
     };
@@ -109,12 +110,39 @@ __webpack_require__.r(__webpack_exports__);
         }
       });
     },
-    handleDel: function handleDel(row) {},
-    fetch: function fetch() {
+    handleDel: function handleDel(row) {
       var _this = this;
 
+      this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        var url = helper.bind_str(routeList.destroy, {
+          id: row.id
+        });
+        ajax["delete"](url).then(function (re) {
+          _this.fetch();
+
+          helper.message('操作成功', {
+            type: "success"
+          });
+        });
+      })["catch"](function () {
+        _this.$message({
+          type: 'info',
+          message: '已取消删除'
+        });
+      });
+    },
+    fetch: function fetch() {
+      var _this2 = this;
+
+      this.loading = true;
       ajax.get(routeList.index).then(function (re) {
-        _this.tableData = re.data;
+        _this2.tableData = re.data;
+      })["finally"](function () {
+        _this2.loading = false;
       });
     }
   }

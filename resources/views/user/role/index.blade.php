@@ -11,6 +11,7 @@
             show:"{{route('user.role.show',['id'=>':id'])}}",
             store:"{{route('user.role.store')}}",
             update:"{{route('user.role.update',['id'=>':id'])}}",
+            destroy:"{{route('user.role.destroy',['id'=>':id'])}}",
             menu:"{{route('user.menu.index')}}",
         }
     </script>

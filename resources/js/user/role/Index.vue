@@ -7,7 +7,7 @@
                         <el-button type="primary" @click="handleAdd">新增</el-button>
                     </div>
                 </template>
-                <template>
+                <template v-loading="loading">
                     <el-table
                         :data="tableData"
                         style="width: 100%">
@@ -43,6 +43,7 @@
         components: {VCard},
         data() {
             return {
+                loading: false,
                 dialogVisible: false,
                 tableData: [],
             }
@@ -61,11 +62,29 @@
                 this.$router.push({name: "Edit", params: {id: row.id}})
             },
             handleDel(row) {
-
+                this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let url = helper.bind_str(routeList.destroy, {id: row.id})
+                    ajax.delete(url).then(re => {
+                        this.fetch()
+                        helper.message('操作成功', {type: "success"})
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
             },
             fetch() {
+                this.loading = true
                 ajax.get(routeList.index).then(re => {
                     this.tableData = re.data
+                }).finally(() => {
+                    this.loading = false
                 })
             }
         }

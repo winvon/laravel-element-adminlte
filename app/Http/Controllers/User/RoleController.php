@@ -138,6 +138,9 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $model= $this->getModel()->query()->findOrFail($id);
+        $model->permissions()->detach();
+        $model->delete();
+        return $id;
     }
 }
