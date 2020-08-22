@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Role;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -24,7 +25,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             return $this->getModel()
-                ->query()
+                ->with(['roles'])
                 ->paginate($request->input('page_size'));
         }
         return view('user.user.index');
@@ -51,11 +52,16 @@ class UserController extends Controller
             'name' => ['required', Rule::unique('users'), 'max:200'],
             'email' => ['required', 'email', Rule::unique('users')],
             'password' => ['nullable', 'min:6', 'max:20'],
+            'roles'=>['nullable','array']
         ]);
         if (data_get($data, 'password')) {
             $data['password'] = Hash::make($data['password']);
         }
         $model = User::create($data);
+
+        $roles=(new Role())->query()->whereIn('id',data_get($data,'roles',[]))->get();
+        $model->syncRoles($roles);
+
         return $model;
     }
 
@@ -97,12 +103,17 @@ class UserController extends Controller
             'name' => ['required', Rule::unique('users')->ignore($id), 'max:200'],
             'email' => ['required', 'email', Rule::unique('users')->ignore($id)],
             'password' => ['nullable', 'min:6', 'max:20'],
+            'roles'=>['nullable','array']
         ]);
         $model = $this->getModel()->with([])->findOrFail($id);
         if (data_get($data, 'password')) {
             $data['password'] = Hash::make($data['password']);
         }
         $model->update($data);
+
+        $roles=(new Role())->query()->whereIn('id',data_get($data,'roles',[]))->get();
+        $model->syncRoles($roles);
+
         return $model;
     }
 

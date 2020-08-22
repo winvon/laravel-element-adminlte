@@ -23,7 +23,14 @@
                         width="180">
                     </el-table-column>
                     <el-table-column
+                        label="角色">
+                        <template slot-scope="scope">
+                            <el-tag size="small" :key="index" v-for="(role,index) in get(scope.row,'roles')">{{get(role,'name')}}</el-tag>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                         prop="created_at"
+                        width="180"
                         label="创建时间">
                     </el-table-column>
                     <el-table-column
@@ -47,7 +54,8 @@
         components: {VCard},
         data() {
             return {
-                tableData: []
+                tableData: [],
+                get:_.get,
             }
         },
         created() {

@@ -116,10 +116,18 @@ __webpack_require__.r(__webpack_exports__);
   created: function created() {
     this.getPermissions();
     this.fetch();
+    this.getRoles();
   },
   methods: {
-    fetch: function fetch() {
+    getRoles: function getRoles() {
       var _this = this;
+
+      ajax.get(routeList.roleList).then(function (re) {
+        _this.roles = re;
+      });
+    },
+    fetch: function fetch() {
+      var _this2 = this;
 
       if (!this.id) {
         return;
@@ -129,36 +137,36 @@ __webpack_require__.r(__webpack_exports__);
         id: this.id
       });
       ajax.get(url).then(function (re) {
-        _this.form = re;
+        _this2.form = re;
 
-        var permissions = _.get(_this.form, 'permissions');
+        var permissions = _.get(_this2.form, 'permissions');
 
-        _this.checkedKeys = _.map(permissions, 'menu_id');
+        _this2.checkedKeys = _.map(permissions, 'menu_id');
 
-        _this.$refs.tree.setCheckedKeys(_this.checkedKeys);
+        _this2.$refs.tree.setCheckedKeys(_this2.checkedKeys);
       });
     },
     getPermissions: function getPermissions() {
-      var _this2 = this;
+      var _this3 = this;
 
       ajax.get(routeList.menu).then(function (re) {
-        _this2.menus = re;
+        _this3.menus = re;
       });
     },
     setPermissions: function setPermissions() {
       this.form.permissions = this.$refs.tree.getCheckedKeys();
     },
     submitForm: function submitForm() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$refs.form.validate(function (valid) {
         if (valid) {
-          ajax.post(routeList.store, _this3.form).then(function (re) {
+          ajax.post(routeList.store, _this4.form).then(function (re) {
             helper.alert('操作成功', {
               type: 'success'
             });
 
-            _this3.$router.push({
+            _this4.$router.push({
               name: "Index"
             });
           });
@@ -169,19 +177,19 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submit: function submit() {
-      var _this4 = this;
+      var _this5 = this;
 
       this.$refs.form.validate(function (valid) {
         if (valid) {
           var url = helper.bind_str(routeList.update, {
-            id: _this4.id
+            id: _this5.id
           });
-          ajax.put(url, _this4.form).then(function (re) {
+          ajax.put(url, _this5.form).then(function (re) {
             helper.alert('操作成功', {
               type: 'success'
             });
 
-            _this4.$router.push({
+            _this5.$router.push({
               name: "Index"
             });
           });

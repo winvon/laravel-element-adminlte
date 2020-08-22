@@ -82,6 +82,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Index",
@@ -90,7 +97,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      tableData: []
+      tableData: [],
+      get: _.get
     };
   },
   created: function created() {
@@ -229,7 +237,28 @@ var render = function() {
                 }),
                 _vm._v(" "),
                 _c("el-table-column", {
-                  attrs: { prop: "created_at", label: "创建时间" }
+                  attrs: { label: "角色" },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "default",
+                      fn: function(scope) {
+                        return _vm._l(_vm.get(scope.row, "roles"), function(
+                          role,
+                          index
+                        ) {
+                          return _c(
+                            "el-tag",
+                            { key: index, attrs: { size: "small" } },
+                            [_vm._v(_vm._s(_vm.get(role, "name")))]
+                          )
+                        })
+                      }
+                    }
+                  ])
+                }),
+                _vm._v(" "),
+                _c("el-table-column", {
+                  attrs: { prop: "created_at", width: "180", label: "创建时间" }
                 }),
                 _vm._v(" "),
                 _c("el-table-column", {

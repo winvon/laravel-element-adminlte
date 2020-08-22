@@ -44,21 +44,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "Edit",
   data: function data() {
     return {
-      validator: validator,
       id: this.$route.params.id,
+      validator: validator,
       form: {
         name: "",
         email: "",
         password: ""
-      }
+      },
+      roles: []
     };
   },
   created: function created() {
     this.fetch();
+    this.getRoles();
   },
   computed: {
     title: function title() {
@@ -66,6 +77,13 @@ __webpack_require__.r(__webpack_exports__);
     }
   },
   methods: {
+    getRoles: function getRoles() {
+      var _this = this;
+
+      ajax.get(routeList.roleList).then(function (re) {
+        _this.roles = re;
+      });
+    },
     passwordRequired: function passwordRequired(rule, value, callback) {
       if (this.id) {
         return callback();
@@ -78,18 +96,16 @@ __webpack_require__.r(__webpack_exports__);
       return callback();
     },
     fetch: function fetch() {
-      var _this = this;
+      var _this2 = this;
 
-      if (!this.id) {
-        return;
+      if (this.id) {
+        var url = helper.bind_str(routeList.userInfo, {
+          id: this.id
+        });
+        ajax.get(url).then(function (res) {
+          _this2.form = res;
+        });
       }
-
-      var url = helper.bind_str(routeList.userInfo, {
-        id: this.id
-      });
-      ajax.get(url).then(function (res) {
-        _this.form = res;
-      });
     },
     cancel: function cancel() {
       this.$router.push({
@@ -97,16 +113,16 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submit: function submit() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.$refs['form'].validate(function (valid) {
         if (valid) {
-          axios.post(routeList.store, _this2.form).then(function (response) {
+          axios.post(routeList.store, _this3.form).then(function (response) {
             helper.alert('操作成功', {
               type: "success"
             });
 
-            _this2.$router.push({
+            _this3.$router.push({
               name: "Index"
             });
           });
@@ -117,19 +133,19 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     submitForm: function submitForm() {
-      var _this3 = this;
+      var _this4 = this;
 
       this.$refs['form'].validate(function (valid) {
         if (valid) {
           var url = helper.bind_str(routeList.userUpdate, {
-            id: _this3.id
+            id: _this4.id
           });
-          axios.put(url, _this3.form).then(function (response) {
+          axios.put(url, _this4.form).then(function (response) {
             helper.alert('操作成功', {
               type: "success"
             });
 
-            _this3.$router.push({
+            _this4.$router.push({
               name: "Index"
             });
           });
@@ -251,6 +267,34 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "el-form-item",
+                  { attrs: { label: "角色", prop: "roles" } },
+                  [
+                    _c(
+                      "el-select",
+                      {
+                        attrs: { multiple: "", placeholder: "请选择" },
+                        model: {
+                          value: _vm.form.roles,
+                          callback: function($$v) {
+                            _vm.$set(_vm.form, "roles", $$v)
+                          },
+                          expression: "form.roles"
+                        }
+                      },
+                      _vm._l(_vm.roles, function(role) {
+                        return _c("el-option", {
+                          key: role.id,
+                          attrs: { label: role.name, value: role.id }
+                        })
+                      }),
+                      1
+                    )
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c(
+                  "el-form-item",
                   {
                     attrs: {
                       label: "密码",
@@ -260,13 +304,6 @@ var render = function() {
                           validator: _vm.passwordRequired,
                           message: "请填写密码",
                           trigger: "blur"
-                        },
-                        {
-                          validator: _vm.validator.strLen,
-                          message: "密码长度为6-20位",
-                          trigger: "blur",
-                          min: 6,
-                          max: 20
                         }
                       ]
                     }

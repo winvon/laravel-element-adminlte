@@ -92,9 +92,9 @@ class RoleController extends Controller
      * @param $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|\Illuminate\View\View|null
      */
-    public function show( Request $request,$id)
+    public function show(Request $request, $id)
     {
-        if ($request->ajax()){
+        if ($request->ajax()) {
             return $this->getModel()->with(['permissions'])->findOrFail($id);
         }
         return view('user.role.index');
@@ -125,7 +125,7 @@ class RoleController extends Controller
             'guard_name' => ['required'],
             'permissions' => ['nullable', 'array']
         ]);
-        $role =$this->getModel()->query()->findOrFail($id);
+        $role = $this->getModel()->query()->findOrFail($id);
         $role->update($data);
         $this->syncPermissions($role, $data['permissions']);
     }
@@ -138,9 +138,14 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        $model= $this->getModel()->query()->findOrFail($id);
+        $model = $this->getModel()->query()->findOrFail($id);
         $model->permissions()->detach();
         $model->delete();
         return $id;
+    }
+
+    public function list()
+    {
+        return $this->getModel()->query()->get();
     }
 }

@@ -10,6 +10,7 @@
     <script>
         var routeList = {
             userList: "{{route('user.user.index')}}",
+            roleList: "{{route('user.role.list')}}",
             userInfo: "{{route('user.user.show',['id'=>':id'])}}",
             userUpdate: "{{route('user.user.update',['id'=>':id'])}}",
             store: "{{route('user.user.store')}}",

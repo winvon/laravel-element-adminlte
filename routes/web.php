@@ -30,6 +30,7 @@ Route::namespace('User')->prefix('user')->name('user.')->group(function () {
 
 
     Route::get('role', 'RoleController@index')->name('role.index');
+    Route::get('role/list', 'RoleController@list')->name('role.list');
     Route::get('role/create', 'RoleController@index')->name('role.create');
     Route::get('role/{id}', 'RoleController@show')->name('role.show');
     Route::put('role/{id}', 'RoleController@update')->name('role.update');

@@ -13,13 +13,15 @@ return [
     |
     */
 
+    'super_admin' => 1,
+
     'defaults' => [
         'guard' => 'web',
         'passwords' => 'users',
     ],
 
-    'users' => [
-        'guard' => 'users',
+    'user' => [
+        'guard' => 'user',
         'passwords' => 'users',
     ],
 
@@ -47,7 +49,7 @@ return [
             'provider' => 'users',
         ],
 
-        'users' => [
+        'user' => [
             'driver' => 'session',
             'provider' => 'users',
         ],

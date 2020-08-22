@@ -43,4 +43,19 @@ class User extends Authenticatable
     {
         return $date->format('Y-m-d H:i:s');
     }
+
+    /**
+     * @param null $id
+     * @return bool
+     */
+    public function isSuperAdmin($id = null)
+    {
+        if ($id) {
+            $user = self::query()->findOrFail($id);
+        } else {
+            $user = $this;
+        }
+        return data_get($user, 'id') === config('auth.super_admin');
+    }
+
 }

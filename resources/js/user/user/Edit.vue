@@ -16,9 +16,18 @@
     ]">
                         <el-input type="email" v-model="form.email"></el-input>
                     </el-form-item>
+                    <el-form-item label="角色" prop="roles"  >
+                        <el-select v-model="form.roles" multiple placeholder="请选择">
+                            <el-option
+                                v-for="role in roles"
+                                :key="role.id"
+                                :label="role.name"
+                                :value="role.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="密码" prop="password" :rules="[
-      { validator: passwordRequired, message: '请填写密码', trigger: 'blur' },
-      { validator: validator.strLen, message: '密码长度为6-20位', trigger: 'blur',min:6,max:20 },
+      { validator: passwordRequired, message: '请填写密码', trigger: 'blur'},
     ]">
                         <el-input type="password" v-model="form.password"></el-input>
                     </el-form-item>
@@ -38,24 +47,32 @@
         name: "Edit",
         data() {
             return {
-                validator: validator,
                 id: this.$route.params.id,
+                validator: validator,
                 form: {
                     name: "",
                     email: "",
                     password: "",
-                }
+                },
+                roles: [],
             }
         },
         created() {
             this.fetch()
+            this.getRoles()
         },
         computed: {
+
             title() {
                 return this.id ? '编辑' : '新增'
             }
         },
         methods: {
+            getRoles(){
+                ajax.get(routeList.roleList).then(re => {
+                    this.roles = re
+                })
+            },
             passwordRequired(rule, value, callback) {
                 if (this.id) {
                     return callback()
@@ -66,13 +83,13 @@
                 return callback()
             },
             fetch() {
-                if (!this.id) {
-                    return
+                if (this.id) {
+                    let url = helper.bind_str(routeList.userInfo, {id: this.id})
+                    ajax.get(url).then(res => {
+                        this.form = res
+                    })
                 }
-                let url = helper.bind_str(routeList.userInfo, {id: this.id})
-                ajax.get(url).then(res => {
-                    this.form = res
-                })
+
             },
             cancel() {
                 this.$router.push({name: "Index"})

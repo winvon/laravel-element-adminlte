@@ -74,9 +74,15 @@
         created() {
             this.getPermissions()
             this.fetch()
+            this.getRoles()
+
         },
         methods: {
-
+            getRoles(){
+                ajax.get(routeList.roleList).then(re => {
+                    this.roles = re
+                })
+            },
             fetch() {
                 if (!this.id) {
                     return
