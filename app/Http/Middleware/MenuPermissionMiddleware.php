@@ -19,7 +19,7 @@ class MenuPermissionMiddleware
     public function handle($request, Closure $next)
     {
         $user = $request->user();
-        if ($user->isSuperAdmin) {
+        if ($user->isSuperAdmin()) {
             return $next($request);
         }
         $menuids = $user->permissions()->pluck('menu_id')->toArray();

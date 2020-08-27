@@ -23,43 +23,25 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                <li class="nav-item ">
-                    <a href="/home"  class="nav-link active">
-                        <i class="nav-icon fas fa-tachometer-alt"></i>
-                        <p>
-                            Dashboard
-                        </p>
-                    </a>
-                </li>
-                <li class="nav-item has-treeview menu-open">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-copy"></i>
-                        <p>
-                            系统管理
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('user.menu.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>菜单管理</p>
+                @foreach(get_admin_menu() as $key => $val)
+                    @if(!data_get($val, 'is_ajax'))
+                        <li  class="nav-item @if(has_menu_children($val, '_child')) has-treeview @endif  @if(data_get($val, 'active') && has_menu_children($val, '_child')) menu-open @endif">
+                            <a data-id="{{ data_get($val, 'id') }}" href="@if(has_menu_children($val, '_child')) javascript: void(0); @else {{ data_get($val, 'url') }} @endif"
+                               class="nav-link  @if(data_get($val, 'active')) active @endif">
+                                @if(data_get($val, 'icon')) <i class="{{ $val['icon'] }}"></i> @endif
+                                <p>
+                                    {{ data_get($val, 'name') }}
+                                    @if(has_menu_children($val, '_child'))
+                                        <i class="right fas fa-angle-left"></i>
+                                    @endif
+                                </p>
                             </a>
+                            @if(has_menu_children($val, '_child'))
+                                @include('layouts.AdminLTE.treeview', ['children'=> data_get($val, '_child')])
+                            @endif
                         </li>
-                        <li class="nav-item">
-                            <a href="{{route('user.role.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>角色管理</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('user.user.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>账户管理</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    @endif
+                @endforeach
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

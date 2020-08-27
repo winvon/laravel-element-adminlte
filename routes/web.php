@@ -28,23 +28,27 @@ Route::namespace('User')->prefix('user')->name('user.')->group(function () {
     Route::post('login', 'LoginController@login')->name('login.login');
     Route::get('temp', 'TempController@index')->name('user.temp.index');
 
+    Route::middleware('menu')->group(function (){
 
-    Route::get('role', 'RoleController@index')->name('role.index');
-    Route::get('role/list', 'RoleController@list')->name('role.list');
-    Route::get('role/create', 'RoleController@index')->name('role.create');
-    Route::get('role/{id}', 'RoleController@show')->name('role.show');
-    Route::put('role/{id}', 'RoleController@update')->name('role.update');
-    Route::delete('role/{id}', 'RoleController@destroy')->name('role.destroy');
-    Route::post('role', 'RoleController@store')->name('role.store');
+        Route::get('role', 'RoleController@index')->name('role.index');
+        Route::get('role/list', 'RoleController@list')->name('role.list');
+        Route::get('role/create', 'RoleController@index')->name('role.create');
+        Route::get('role/{id}', 'RoleController@show')->name('role.show');
+        Route::put('role/{id}', 'RoleController@update')->name('role.update');
+        Route::delete('role/{id}', 'RoleController@destroy')->name('role.destroy');
+        Route::post('role', 'RoleController@store')->name('role.store');
 
-    Route::get('menu', 'MenuController@index')->name('menu.index');
-    Route::post('menu', 'MenuController@store')->name('menu.store');
-    Route::put('menu/{id}', 'MenuController@update')->name('menu.update');
+        Route::get('menu', 'MenuController@index')->name('menu.index');
+        Route::post('menu', 'MenuController@store')->name('menu.store');
+        Route::put('menu/{id}', 'MenuController@update')->name('menu.update');
 
-    Route::get('user', 'UserController@index')->name('user.index');
-    Route::get('user/create', 'UserController@index')->name('user.create');
-    Route::post('user/store', 'UserController@store')->name('user.store');
-    Route::get('user/{id}', 'UserController@show')->name('user.show');
-    Route::put('user/{id}', 'UserController@update')->name('user.update');
+        Route::get('user', 'UserController@index')->name('user.index');
+        Route::get('user/create', 'UserController@index')->name('user.create');
+        Route::post('user/store', 'UserController@store')->name('user.store');
+        Route::get('user/{id}', 'UserController@show')->name('user.show');
+        Route::put('user/{id}', 'UserController@update')->name('user.update');
+
+        Route::get('sys/index',"SysController@index")->name('sys.index');
+    });
 });
 

@@ -12,6 +12,7 @@ const mix = require('laravel-mix');
  */
 
 mix
+    .js('resources/js/user/sys/index.js', 'public/js/user/sys/index.js')
     .js('resources/js/user/role/index.js', 'public/js/user/role/index.js')
     .js('resources/js/user/menu/index.js', 'public/js/user/menu/index.js')
     .js('resources/js/user/user/index.js', 'public/js/user/user/index.js')
